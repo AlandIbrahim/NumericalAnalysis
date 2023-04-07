@@ -1,3 +1,7 @@
 ﻿using NumericalAnalysis;
 
-Chapter1.FindRoots(-5, 5);
+Util.InitializeFunction();
+
+Console.WriteLine($"\nf(x)={Util.scrpt}\n");
+
+Console.WriteLine($"f'(x)={Util.Derivative(Util.scrpt)}");
