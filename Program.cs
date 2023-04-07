@@ -9,6 +9,43 @@ double Bisection(double x1, double x2, double tol)
     if (fx1 * fx3 < 0) return Bisection(x1, x3, tol);
     else return Bisection(x3, x2, tol);
 }
+void FindRoots(double x1, double x2)
+{
+    // Calculate the length of the range array
+    int rLength = (int)Math.Abs(x2 - x1);
+    // Initialize the range and signShift arrays
+    double[] range = new double[rLength];
+    int[] signShift = new int[rLength];
+    // Set all elements of signShift to -1
+    for (int i = 0; i < rLength; i++)
+        signShift[i] = -1;
+    // Index to keep track of where to add elements to signShift
+    int signShiftIndex = 0;
+    // Fill the range array with values from the function
+    for (int i = 0; i < rLength; i++)
+        range[i] = func(x1 + i);
+    // Keep track of the previous sign of the function values
+    bool previousSign = range[0] > 0;//true is positive, false is negative
+    // Loop through the range array and find where the sign changes
+    for (int i = 1; i < rLength; i++)
+    {
+        if (range[i] > 0 != previousSign)
+        {
+            // Add the index where the sign change occurred to signShift
+            signShift[signShiftIndex] = i;
+            signShiftIndex++;
+        }
+        previousSign = range[i] > 0;
+    }
+    // Loop through signShift and print the roots found
+    for (int i = 0; i < rLength; i++)
+    {
+        if (signShift[i] > 0)
+            Console.WriteLine($"found root at: x={x1 + signShift[i] - 1} to x={x1 + signShift[i]}");
+        else
+            return;
+    }
+}
 #endregion
 #region CH2
 double Trapezo(double[] fx, double h)
@@ -54,11 +91,10 @@ double Simpson(double[] fx, double h)
         return firstHalf + secondHalf;
     }
 }
-
+#endregion
 double func(double x)
 {
-    return Math.Pow(x,2)-0.5;
+    return 0.35*Math.Pow(x,4)-5*Math.Pow(x,2)+5;
 }
-#endregion
 
-Console.WriteLine($"bisected value is {Bisection(0,1,0.0001)}");
+FindRoots(-5, 5);
