@@ -5,7 +5,7 @@ namespace NumericalAnalysis
 {
     static class Util
     {
-        static readonly ScriptControl sc = new() { Language = "javascript" };
+        static readonly ScriptControl sc = new ScriptControl() { Language = "javascript" };
         public static string scrpt="";
         public static void InitializeFunction()
         {
@@ -14,10 +14,6 @@ namespace NumericalAnalysis
             try
             {
                 scrpt = Console.ReadLine();
-                if (scrpt.Contains('^'))
-                {
-                    scrpt = scrpt.Replace("^", "**");
-                }
             }
             catch
             {
@@ -27,41 +23,69 @@ namespace NumericalAnalysis
         }
         public static string Derivative(string fx)
         {
-            Regex derivePow = new Regex(@"(?'multiplier'\d+)?\*?x\*?\*?(?'exponent'\d+)?");
+            Regex derivePow = new Regex(@"(?'multiplier'\d+\.?\d*)?\*?x\^?(?'exponent'\d+)?");
             string fxdx = fx;
-            string[] sections = fx.Split('+');
+            string[] sections = fx.Split('+','-');
             for (int i = 0; i < sections.Length; i++)
             {
                 string subSection = "";
                 if (sections[i].Contains('x'))
                 {
                     var mtch = derivePow.Match(sections[i]);
-                    int multiplier = 1, exponent = 1;
+                    double multiplier = 1, exponent = 1;
                     if (mtch.Groups["multiplier"].Success)
-                        multiplier = int.Parse(mtch.Groups["multiplier"].Value);
+                        multiplier = double.Parse(mtch.Groups["multiplier"].Value);
                     if (mtch.Groups["exponent"].Success)
-                        exponent = int.Parse(mtch.Groups["exponent"].Value);
+                        exponent = double.Parse(mtch.Groups["exponent"].Value);
                     subSection += multiplier * exponent;
                     if (exponent > 1)
                     {
-                        subSection += "*x";
-                        if (exponent > 2) subSection += "**" + (exponent - 1);
+                        subSection += "x";
+                        if (exponent > 2) subSection += "^" + (exponent - 1);
                     }
                     sections[i] = subSection;
                 }
-                else sections[i] = "0";
+                else sections[i] = "";
             }
-            return string.Join('+',sections);
+            string[] result=sections.Where(sec=>sec.Length>0).ToArray();
+            return string.Join('+',result);
         }
-        public static double func(double x)
+        static string ConvertFunc(string script)
+        {
+            string[] sections = script.Split("+");
+            //multiplier conversion
+            Regex multiplier = new Regex(@"(?'multiplier'\d+\.?\d*)x");
+            for (int i = 0; i < sections.Length; i++)
+            {
+                var mtch = multiplier.Match(sections[i]);
+                if (mtch.Success)
+                {
+                    sections[i] = sections[i].Replace(mtch.Groups["multiplier"].Value, $"{mtch.Groups["multiplier"].Value}*");
+                }
+            }
+            //exponent conversion
+            Regex pow = new Regex(@"\^(?'pow'\d+)");
+            for (int i = 0; i < sections.Length; i++)
+            {
+                var mtch= pow.Match(sections[i]);
+                if (mtch.Success)
+                {
+                    sections[i] = sections[i].Replace("x^" + mtch.Groups["pow"], $"Math.pow(x,{mtch.Groups["pow"].Value})");
+                }
+            }
+            return string.Join("+",sections);
+        }
+        public static double Func(double x)
         {
             if (scrpt == "") InitializeFunction();
-            string nscript = scrpt.Replace("x", x.ToString());
+            string nscript = ConvertFunc(scrpt);
+            nscript = nscript.Replace("x", $"({x})");
             return sc.Eval(nscript);
         }
-        public static double func(string scrpt,double x)
+        public static double Func(string scrpt,double x)
         {
-            string nscript = scrpt.Replace("x", x.ToString());
+            string nscript= ConvertFunc(scrpt);
+            nscript = nscript.Replace("x", $"({x})");
             return sc.Eval(nscript);
         }
     }
