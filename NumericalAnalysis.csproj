@@ -20,8 +20,4 @@
     </COMReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Jint" Version="2.11.58" />
-  </ItemGroup>
-
 </Project>
