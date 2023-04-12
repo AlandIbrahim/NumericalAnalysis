@@ -2,11 +2,14 @@
 {
     static class Chapter2
     {
-        public static double Trapezo(double[] fx, double h)
+        // Short and easy Trapezoidal method:
+        public static double Trapezo(double a, double b,double n)
         {
+            double h = (b - a)/n;// n is the number of intervals, the higher the n the more accurate the result.
             double sum = 0;
-            for (int i = 1; i < fx.Length - 1; i++) sum += fx[i];
-            return (h / 2) * (fx[0] + 2 * sum + fx[fx.Length - 1]);
+            for (int i = 1; i < n; i++)// we start from 1 because we don't want to add the first and last values twice.
+                sum += Util.Func(a + i * h);
+            return (h / 2) * (Util.Func(a) + 2 * sum + Util.Func(b));// the formula for the trapezoidal method.
         }
         public static double Simpson(double[] fx, double h)
         {
@@ -29,7 +32,7 @@
             }
             else
             {
-                //if not divisible by 2 nor 3:
+                //if neither divisible by 2 nor 3:
 
                 //calculate first half using 3h/8 method:
                 sum = 3 * (fx[1] + fx[2]);

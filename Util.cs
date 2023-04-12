@@ -5,6 +5,19 @@ namespace NumericalAnalysis
 {
     static class Util
     {
+        // This is a helper function that outputs the changes in sign, from + to -, and it accomodates for 0 too.
+        public static char[] CalculateSign(double[] range)
+        {
+            // Initialize signmap with the input range.
+            char[] signMap = new char[range.Length];
+            // Loop through the range array and find where the sign changes
+            for (int i = 0; i < range.Length; i++)
+                if (range[i] > 0) signMap[i] = '+';
+                else if (range[i] < 0) signMap[i] = '-';
+                else signMap[i] = '0';
+            return signMap;
+        }
+        ////////////NOT INCLUDED FOR THE EXAM///////////////
         static readonly ScriptControl sc = new ScriptControl() { Language = "javascript" };
         public static string scrpt="";
         public static void InitializeFunction()
@@ -93,5 +106,6 @@ namespace NumericalAnalysis
             nscript = nscript.Replace("x", $"({x})");
             return sc.Eval(nscript);
         }
+        /////////////////////////////////////////////////////
     }
 }

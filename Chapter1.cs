@@ -17,17 +17,18 @@
             int rLength = (int)Math.Abs(x2 - x1);
             // Initialize the range and signShift arrays
             double[] range = new double[rLength];
+            // Fill the range array with values from the function
             for (int i = 0; i < rLength; i++)
-                range[i] = Util.Func(x1 + i);
+                range[i] = Util.Func(x1 + i);// "x1+i" because we want to start at x1 and go to x2, incrementing by 1 each time, multiply i with any value to change increment value.
+            // Initialize the signShift array with -1
             int[] signShift = new int[rLength];
             for (int i = 0; i < rLength; i++)
                 signShift[i] = -1;
-            char[] signMap = CalculateSign(range);
+            // Calculate the sign at each index of the range array
+            char[] signMap = Util.CalculateSign(range);
             // Index to keep track of where to add elements to signShift
             int signShiftIndex = 0;
-            // Fill the range array with values from the function
-            // Keep track of the previous sign of the function values
-            // Loop through the range array and find where the sign changes
+            // Loop through the signMap array and find where the sign changes
             for (int i = 1; i < rLength; i++)
             {
                 if (signMap[i] != signMap[i-1])
@@ -46,14 +47,6 @@
                     return;
             }
         }
-        static char[] CalculateSign(double[] range)
-        {
-            char[] signMap = new char[range.Length];
-            for (int i = 0; i < range.Length; i++)
-                if (range[i] > 0) signMap[i] = '+';
-                else if (range[i] < 0) signMap[i] = '-';
-                else signMap[i] = '0';
-            return signMap;
-        }
+        
     }
 }
