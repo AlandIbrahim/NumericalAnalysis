@@ -21,8 +21,9 @@ namespace NumericalAnalysis
                 goto init;
             }
         }
-        public static string Derivative(string fx)
+        public static string Derivative(string fx,out double HighestPow)
         {
+            HighestPow = double.NegativeInfinity;
             Regex derivePow = new Regex(@"(?'multiplier'\d+\.?\d*)?\*?x\^?(?'exponent'\d+)?");
             string fxdx = fx;
             string[] sections = fx.Split('+','-');
@@ -36,12 +37,16 @@ namespace NumericalAnalysis
                     if (mtch.Groups["multiplier"].Success)
                         multiplier = double.Parse(mtch.Groups["multiplier"].Value);
                     if (mtch.Groups["exponent"].Success)
+                    {
                         exponent = double.Parse(mtch.Groups["exponent"].Value);
+                    }
                     subSection += multiplier * exponent;
-                    if (exponent > 1)
+                    exponent--;
+                    HighestPow = HighestPow > exponent ? HighestPow : exponent;
+                    if (exponent > 0)
                     {
                         subSection += "x";
-                        if (exponent > 2) subSection += "^" + (exponent - 1);
+                        if (exponent > 1)subSection += "^" + (exponent);
                     }
                     sections[i] = subSection;
                 }

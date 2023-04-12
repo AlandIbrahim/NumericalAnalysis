@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NumericalAnalysis
+﻿namespace NumericalAnalysis
 {
     static class Chapter1
     {
@@ -28,7 +22,7 @@ namespace NumericalAnalysis
             int[] signShift = new int[rLength];
             for (int i = 0; i < rLength; i++)
                 signShift[i] = -1;
-            bool[] signMap = CalculateSign(range);
+            char[] signMap = CalculateSign(range);
             // Index to keep track of where to add elements to signShift
             int signShiftIndex = 0;
             // Fill the range array with values from the function
@@ -52,16 +46,14 @@ namespace NumericalAnalysis
                     return;
             }
         }
-        static bool[] CalculateSign(double[] range)
+        static char[] CalculateSign(double[] range)
         {
-            bool[] signMap = new bool[range.Length];
+            char[] signMap = new char[range.Length];
             for (int i = 0; i < range.Length; i++)
-                signMap[i] = range[i] > 0;
+                if (range[i] > 0) signMap[i] = '+';
+                else if (range[i] < 0) signMap[i] = '-';
+                else signMap[i] = '0';
             return signMap;
-        }
-        public static void BudensMethod(double x1, double x2)
-        {
-
         }
     }
 }
