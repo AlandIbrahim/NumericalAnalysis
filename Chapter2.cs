@@ -3,7 +3,7 @@
     static class Chapter2
     {
         // Short and easy Trapezoidal method:
-        public static double Trapezo(double a, double b,double n)
+        public static double Trapezo(double a, double b,int n)
         {
             double h = (b - a)/n;// n is the number of intervals, the higher the n the more accurate the result.
             double sum = 0;
@@ -11,10 +11,15 @@
                 sum += Util.Func(a + i * h);
             return (h / 2) * (Util.Func(a) + 2 * sum + Util.Func(b));// the formula for the trapezoidal method.
         }
-        public static double Simpson(double[] fx, double h)
+        // Fully functional Simpson's method:
+        public static double Simpson(double a,double b, int n)
         {
+            if (n <= 0) throw new Exception("value of n must be bigger than 0");// if n is zero or negative, this method cannot work and it'll throw an exception.
             double sum = 0;
-            int n = fx.Length - 1;
+            double[] fx = new double[n + 1];
+            double h= (b - a) / n;
+            for (int i = 0; i <= n; i++)
+                fx[i] = Util.Func(a + i * h);
             if (n % 2 == 0)
             {
                 //if divisible by 2:

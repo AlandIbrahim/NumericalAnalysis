@@ -31,18 +31,26 @@
             // Loop through the signMap array and find where the sign changes
             for (int i = 1; i < rLength; i++)
             {
-                if (signMap[i] != signMap[i-1])
+                if (signMap[i] == '0')// if fx=0 then the exact root is found.
                 {
-                    // Add the index where the sign change occurred to signShift
-                    signShift[signShiftIndex] = i;
-                    signShiftIndex++;
+                    Console.WriteLine($"found root at: x={x1 + i}");
+                    continue;
+                }
+                if (signMap[i] != signMap[i-1])// compare sigbnmap value with its preceeding index
+                {
+                    if (signMap[i-1]!='0')// make sure to exclude change from zero.
+                    {
+                        // add the index of the change
+                        signShift[signShiftIndex] = i;
+                        signShiftIndex++;
+                    }
                 }
             }
             // Loop through signShift and print the roots found
             for (int i = 0; i < rLength; i++)
             {
                 if (signShift[i] > 0)
-                    Console.WriteLine($"found root at: x={x1 + signShift[i] - 1} to x={x1 + signShift[i]}");
+                    Console.WriteLine($"found root between x={x1 + signShift[i] - 1} and x={x1 + signShift[i]}");
                 else
                     return;
             }
