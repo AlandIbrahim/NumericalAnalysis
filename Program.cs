@@ -2,4 +2,4 @@
 
 Util.InitializeFunction();
 
-Console.WriteLine(Util.Derivative(Util.scrpt));
+Console.WriteLine(Util.Derivative(Util.scrpt,out _));

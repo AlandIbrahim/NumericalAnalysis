@@ -22,7 +22,7 @@
             int[] signShift = new int[rLength];
             for (int i = 0; i < rLength; i++)
                 signShift[i] = -1;
-            char[] signMap = CalculateSign(range);
+            char[] signMap = Util.CalculateSign(range);
             // Index to keep track of where to add elements to signShift
             int signShiftIndex = 0;
             // Fill the range array with values from the function
@@ -46,15 +46,7 @@
                     return;
             }
         }
-        static char[] CalculateSign(double[] range)
-        {
-            char[] signMap = new char[range.Length];
-            for (int i = 0; i < range.Length; i++)
-                if (range[i] > 0) signMap[i] = '+';
-                else if (range[i] < 0) signMap[i] = '-';
-                else signMap[i] = '0';
-            return signMap;
-        }
+        
         public static void BudensMethod(double x1, double x2)
         {
 
